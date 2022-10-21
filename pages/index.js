@@ -1,28 +1,35 @@
-import Head from "next/head";
 import { client } from "../utils/client";
 import { HeroBanner, Product, FooterBanner } from "../components";
 
-const Home = () => {
+const Home = ({ products, bannerData }) => {
   return (
     <>
-      <Head>
-        <title>Next Ecommerce</title>
-      </Head>
-      <HeroBanner />
+      <HeroBanner data={bannerData[0]} />
       <div className="products-heading">
         <h2>Best Selling Products</h2>
         <p>Headphones of all kinds</p>
       </div>
 
       <div className="products-container">
-        {["Product1", "Product2"].map((product, index) => (
-          <Product key={index} product={product} />
+        {products?.map((product) => (
+          <Product key={product._id} product={product} />
         ))}
       </div>
 
-      <FooterBanner />
+      <FooterBanner data={bannerData && bannerData[0]} />
     </>
   );
+};
+
+export const getServerSideProps = async () => {
+  const query = '*[_type == "product"]';
+  const products = await client.fetch(query);
+  const bannerQuery = '*[_type == "banner"]';
+  const bannerData = await client.fetch(bannerQuery);
+
+  return {
+    props: { products, bannerData },
+  };
 };
 
 export default Home;
