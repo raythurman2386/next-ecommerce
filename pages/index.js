@@ -1,20 +1,28 @@
 import Head from "next/head";
+import { client } from "../utils/client";
+import { HeroBanner, Product, FooterBanner } from "../components";
 
-export default function Home() {
+const Home = () => {
   return (
-    <div>
+    <>
       <Head>
         <title>Next Ecommerce</title>
-        <meta
-          name="description"
-          content="Ecommerce application built with NextJS and Sanity"
-        />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
+      <HeroBanner />
+      <div className="products-heading">
+        <h2>Best Selling Products</h2>
+        <p>Headphones of all kinds</p>
+      </div>
 
-      <main></main>
+      <div className="products-container">
+        {["Product1", "Product2"].map((product, index) => (
+          <Product key={index} product={product} />
+        ))}
+      </div>
 
-      <footer></footer>
-    </div>
+      <FooterBanner />
+    </>
   );
-}
+};
+
+export default Home;
