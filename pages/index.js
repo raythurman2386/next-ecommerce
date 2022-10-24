@@ -1,20 +1,35 @@
-import Head from "next/head";
+import { client } from "../utils/client";
+import { HeroBanner, Product, FooterBanner } from "../components";
 
-export default function Home() {
+const Home = ({ products, bannerData }) => {
   return (
-    <div>
-      <Head>
-        <title>Next Ecommerce</title>
-        <meta
-          name="description"
-          content="Ecommerce application built with NextJS and Sanity"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <>
+      <HeroBanner data={bannerData[0]} />
+      <div className="products-heading">
+        <h2>Best Selling Products</h2>
+        <p>Headphones of all kinds</p>
+      </div>
 
-      <main></main>
+      <div className="products-container">
+        {products?.map((product) => (
+          <Product key={product._id} product={product} />
+        ))}
+      </div>
 
-      <footer></footer>
-    </div>
+      <FooterBanner data={bannerData && bannerData[0]} />
+    </>
   );
-}
+};
+
+export const getServerSideProps = async () => {
+  const query = '*[_type == "product"]';
+  const products = await client.fetch(query);
+  const bannerQuery = '*[_type == "banner"]';
+  const bannerData = await client.fetch(bannerQuery);
+
+  return {
+    props: { products, bannerData },
+  };
+};
+
+export default Home;
