@@ -8,6 +8,7 @@ import {
 } from "react-icons/ai";
 import { client, urlFor } from "../../utils/client";
 import { Product } from "../../components";
+import Skeleton from "react-loading-skeleton";
 
 const ProductDetails = ({ product, products }) => {
   const { image, name, details, price } = product;
@@ -38,7 +39,7 @@ const ProductDetails = ({ product, products }) => {
           </div>
         </div>
         <div className="product-details-desc">
-          <h1>{name}</h1>
+          <h1>{name || <Skeleton />}</h1>
           <div className="reviews">
             <div>
               <AiFillStar />
@@ -50,8 +51,8 @@ const ProductDetails = ({ product, products }) => {
             <p>(20)</p>
           </div>
           <h4>Details: </h4>
-          <p>{details}</p>
-          <p className="price">${price}</p>
+          <p>{details || <Skeleton count={3} />}</p>
+          <p className="price">${price || <Skeleton />}</p>
           <div className="quantity">
             <h3>Quantity</h3>
             <p className="quantity-desc">
